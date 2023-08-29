@@ -1,3 +1,5 @@
+use std::cell;
+
 use nannou::prelude::*;
 
 const WIDTH: i32 = 1000;
@@ -60,11 +62,19 @@ fn update(app: &App, _model: &mut Model, update: Update) {
 fn neighbor(_model: &mut Model, index: i32) {
     let cell_size = _model._cells[0]._size as f32;
     let width = WIDTH / cell_size as i32;
+    let height = HEIGHT / cell_size as i32;
     for j in 0..HEIGHT / cell_size as i32 {
         for i in 0..WIDTH / cell_size as i32 {
             let current_cell = &_model._cells[(j * width + i) as usize];
-            let left_neighbor_cell = &_model._cells[(j * width + ((i - 1) % width)) as usize];
-            let right_neighbor_cell = &_model._cells[(j * width + ((i + 1) % width)) as usize];
+            let mut left_cell = &mut _model._cells[(j * width + modulo(i - 1, width)) as usize];
+            let mut right_cell = &mut _model._cells[(j * width + modulo(i + 1, width)) as usize];
+            let mut bottom_cell = &mut _model._cells[(modulo(j + 1, height) * width + i) as usize];
+            let mut top_cell = &mut _model._cells[(modulo(j - 1, height) * width + i) as usize];
+            let mut top_left_cell = &mut _model._cells[(modulo(j - 1, height) + modulo(i - 1, width)) as usize];
+            let mut top_right_cell = &mut _model._cells[(modulo(j - 1, height) + modulo(i + 1, width)) as usize];
+            let mut bottom_left_cell = &mut _model._cells[(modulo(j + 1, height) + modulo(i - 1, width)) as usize];
+            let mut bottom_right_cell = &mut _model._cells[(modulo(j + 1, height) + modulo(i + 1, width)) as usize];
+
         }
     }
 }
