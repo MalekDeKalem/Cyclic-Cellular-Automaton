@@ -41,7 +41,12 @@ fn model(app: &App) -> Model {
     let cols: Vec<Srgb<u8>> = vec![Srgb::<u8>::new(240, 98, 55),Srgb::<u8>::new(88, 32, 155), Srgb::<u8>::new(240, 35, 144), Srgb::<u8>::new(2, 98, 55), Srgb::<u8>::new(240, 54, 5), Srgb::<u8>::new(43, 120, 33),Srgb::<u8>::new(240, 120, 12)];
     let width = WIDTH / CELL_SIZE;
     let height: i32 = HEIGHT / CELL_SIZE;
-    let grid = vec![vec![vec![0; height as usize]; width as usize]; 2];
+    let mut grid = vec![vec![vec![0; height as usize]; width as usize]; 2];
+    for j in 0..height {
+        for i in 0..width {
+            grid[0][i as usize][j as usize] = random_range(0, STATES - 1);
+        }
+    }
     Model {_frame: frame, _cols: cols, _width: width, _height: height, _grid: grid }
 }
 
