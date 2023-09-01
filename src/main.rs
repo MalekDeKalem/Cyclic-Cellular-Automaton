@@ -5,13 +5,12 @@ use nannou::prelude::*;
 const WIDTH: i32 = 1280;
 const HEIGHT: i32 = 720;
 const STATES: i32 = 8;
-const NEIGHBORHOOD: [[i32 ; 2] ; 4] = [[-1, 4], [2, 1], [-1, 1], [5, 5]];
 const CELL_SIZE: i32 = 2; 
 /*
-The first generation starts out with random states in each of the cells.
-In each subsequent generation,
-if a cell has a neighboring cell whose value is the successor of the cell's value, 
-the cell is "consumed" and takes on the succeeding value
+    The first generation starts out with random states in each of the cells.
+    In each subsequent generation,
+    if a cell has a neighboring cell whose value is the successor of the cell's value, 
+    the cell is "consumed" and takes on the succeeding value
 */
 
 
@@ -28,6 +27,9 @@ struct Model {
     _width: i32,
     _height: i32,
     _grid: Vec<Vec<Vec<i32>>>,
+    _threshold: i32,
+    _neighbourhood: Vec<Vec<i32>>,    
+    _posvec: Vec<Point2>
 }
 
 fn model(app: &App) -> Model {
@@ -42,12 +44,20 @@ fn model(app: &App) -> Model {
     let width = WIDTH / CELL_SIZE;
     let height: i32 = HEIGHT / CELL_SIZE;
     let mut grid = vec![vec![vec![0; height as usize]; width as usize]; 2];
+    let mut posvec = vec![pt2(0.0, 0.0) ; (width * height) as usize];
+    let mut x = (-WIDTH/2 + CELL_SIZE / 2) as f32;
+    let mut y = (HEIGHT/2 - CELL_SIZE / 2) as f32;
     for j in 0..height {
         for i in 0..width {
             grid[0][i as usize][j as usize] = random_range(0, STATES - 1);
+            posvec[(j * width + i) as usize] = pt2(x, y);
+            x += CELL_SIZE as f32;
         }
+        y -= CELL_SIZE as f32;
     }
-    Model {_frame: frame, _cols: cols, _width: width, _height: height, _grid: grid }
+    let threshold = 4;
+    let neighbourhood: Vec<Vec<i32>> = vec![vec![-1, 4], vec![2, 1], vec![-1, 1], vec![5, 5]];
+    Model { _frame: frame, _cols: cols, _width: width, _height: height, _grid: grid, _threshold: threshold, _neighbourhood: neighbourhood, _posvec: posvec }
 }
 
 fn modulo(a: i32, b: i32) -> i32 {
