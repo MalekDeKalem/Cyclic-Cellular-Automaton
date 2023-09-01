@@ -23,7 +23,11 @@ fn main() {
 
 
 struct Model {
-
+    _frame: i32,
+    _cols: Vec<Srgb<u8>>,
+    _width: i32,
+    _height: i32,
+    _grid: Vec<Vec<Vec<i32>>>,
 }
 
 fn model(app: &App) -> Model {
@@ -33,8 +37,12 @@ fn model(app: &App) -> Model {
         .view(view)
         .build()
         .unwrap();
-
-    Model {}
+    let frame = 0;
+    let cols: Vec<Srgb<u8>> = vec![Srgb::<u8>::new(240, 98, 55),Srgb::<u8>::new(88, 32, 155), Srgb::<u8>::new(240, 35, 144), Srgb::<u8>::new(2, 98, 55), Srgb::<u8>::new(240, 54, 5), Srgb::<u8>::new(43, 120, 33),Srgb::<u8>::new(240, 120, 12)];
+    let width = WIDTH / CELL_SIZE;
+    let height: i32 = HEIGHT / CELL_SIZE;
+    let grid = vec![vec![vec![0; height as usize]; width as usize]; 2];
+    Model {_frame: frame, _cols: cols, _width: width, _height: height, _grid: grid }
 }
 
 fn modulo(a: i32, b: i32) -> i32 {
