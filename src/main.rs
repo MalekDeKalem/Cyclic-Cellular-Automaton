@@ -76,6 +76,18 @@ fn modulo(a: i32, b: i32) -> i32 {
     ((a % b) + b) % b
 }
 
+fn get_neighbors(x: i32, y: i32, _model: &Model) -> Vec<i32> {
+    let mut neighbors: Vec<i32> = vec![];
+        for dx in -1..=1 {
+            for dy in -1..=1 {
+                let nx = modulo(x + dx, _model._width);
+                let ny = modulo(y + dy, _model._height);
+                neighbors.push(_model._grid[nx as usize][ny as usize]);
+            }
+        }
+    neighbors
+}
+
 fn update(app: &App, _model: &mut Model, update: Update) {
     if app.elapsed_frames() % 60 != 0 {
         return;
