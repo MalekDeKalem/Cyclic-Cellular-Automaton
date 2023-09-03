@@ -1,11 +1,14 @@
 use std::{cell, time::Duration};
 
 use nannou::prelude::*;
+use std::sync::atomic::{AtomicU64, Ordering};
 
 const WIDTH: i32 = 1280;
 const HEIGHT: i32 = 720;
 const STATES: i32 = 8;
-const CELL_SIZE: i32 = 10; 
+const CELL_SIZE: i32 = 20; 
+static RENDER_TICKS: AtomicU64 = AtomicU64::new(0);
+
 /*
     The first generation starts out with random states in each of the cells.
     In each subsequent generation,
@@ -74,14 +77,19 @@ fn modulo(a: i32, b: i32) -> i32 {
 }
 
 fn update(app: &App, _model: &mut Model, update: Update) {
-
-    
+    if app.elapsed_frames() % 60 != 0 {
+        return;
+    }
 }
 
 
 fn view(app: &App, model: &Model, frame: Frame) {
     let draw = app.draw();
     draw.background().color(BLACK);
+
+    if app.elapsed_frames() % 60 != 0 {
+        return;
+    }
 
 
     for i in 0..model._posvec.len() {
