@@ -72,6 +72,16 @@ fn model(app: &App) -> Model {
     Model { _cols: cols, _width: width, _height: height, _grid: grid, _threshold: threshold, _neighbourhood: neighbourhood, _posvec: posvec , _rules: rules }
 }
 
+fn empty_grid(width: i32, height: i32) -> Vec<Vec<i32>> {
+    let mut grid = vec![vec![0; height as usize]; width as usize];
+    for j in 0..height {
+        for i in 0..width {
+            grid[i as usize][j as usize] = random_range(0, STATES - 1);
+        }
+    }
+    grid
+}
+
 fn modulo(a: i32, b: i32) -> i32 {
     ((a % b) + b) % b
 }
@@ -80,6 +90,11 @@ fn get_neighbors(x: i32, y: i32, _model: &Model) -> Vec<i32> {
     let mut neighbors: Vec<i32> = vec![];
         for dx in -1..=1 {
             for dy in -1..=1 {
+
+                if dx == 0 && dy == 0 {
+                    continue;
+                }
+
                 let nx = modulo(x + dx, _model._width);
                 let ny = modulo(y + dy, _model._height);
                 neighbors.push(_model._grid[nx as usize][ny as usize]);
@@ -89,9 +104,18 @@ fn get_neighbors(x: i32, y: i32, _model: &Model) -> Vec<i32> {
 }
 
 fn update(app: &App, _model: &mut Model, update: Update) {
-    if app.elapsed_frames() % 60 != 0 {
-        return;
-    }
+    // if app.elapsed_frames() % 60 != 0 {
+    //     return;
+    // }
+
+    // for j in 0.._model._height {
+    //     for i in 0.._model._width {
+    //         let neighbors = get_neighbors(i, j, &_model);
+    //     }
+    // }
+
+    let a: Vec<i32> = get_neighbors(0, 0, _model);
+    println!("{:?}", a);
 }
 
 
